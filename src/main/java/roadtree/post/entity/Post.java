@@ -1,14 +1,16 @@
 package roadtree.post.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
 import roadtree.post.entity.type.Category;
-
-
+@Entity
 @Getter
 @Setter
-@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Post {
 
     @Id
@@ -70,3 +72,4 @@ public class Post {
 
 
 }
+
