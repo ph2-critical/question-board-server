@@ -1,6 +1,9 @@
 package roadtree.post.dto.respone;
 
 import jakarta.persistence.Embedded;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 import roadtree.post.entity.embed.Content;
 import roadtree.post.entity.embed.NickName;
 import roadtree.post.entity.embed.PostInfo;
@@ -10,6 +13,9 @@ import java.util.List;
 
 public class PostResponseDto {
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
     public static class CreatedPost {
         private Long id;
         //        private String title; //재활용하면 되지않나?
@@ -23,7 +29,8 @@ public class PostResponseDto {
 //        private List<String> commentList; // 댓글 내용도 없음
 
     }
-
+    @Getter
+    @AllArgsConstructor
     public static class FindPost {
         private Long id;
         private Title title;
