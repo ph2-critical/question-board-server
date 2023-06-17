@@ -5,7 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
-import roadtree.post.entity.type.Category;
+import roadtree.post.entity.embed.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -17,39 +21,22 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
 
-    @Column(length = 100, nullable = false)// 추후 타입으로 표현
-    private String nickname;
 
-    @Column(length = 255, nullable = false)
-    private String password;
+    @Embedded
+    private NickName nickName;
 
-    @Column
-    private Category categoryId;
+    @Embedded
+    private Password password;
 
-    @Column
-    private String title;
+    @Embedded
+    private Title title;
 
-    @Column
-    private String content;
+    @Embedded
+    private Content content;
 
-    @Column
-    private Long views;
+    @Embedded
+    private PostInfo postInfo;
 
-    @Column
-    private Long likes;
-
-    @Column
-    private Long dislikes;
-
-    @Column
-    private Long meToos;
-
-    @Column
-    private Long comments;
-
-    @Column
-    //댓글 총 갯수
-    private Long commentCount;
 
     @Column
     //게시판작성,
@@ -58,7 +45,6 @@ public class Post {
     //최근 댓글 업데이트날짜
     @Column
     private String commentUpdatedAt;
-
 
     @Column
     private String deletedAt;
@@ -70,6 +56,21 @@ public class Post {
     @Column
     private boolean notice;
 
+    @OneToOne
+    private Category category;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> commentsList = new ArrayList<>();
+
+    public void addComment(Comment comment) {
+        commentsList.add(comment);
+        comment.setPost(this);
+    }
+
+    public void removeComment(Comment comment) {
+        commentsList.remove(comment);
+        comment.setPost(null);
+    }
 
 }
 

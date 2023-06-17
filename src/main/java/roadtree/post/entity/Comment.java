@@ -5,6 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import roadtree.post.entity.embed.Content;
+import roadtree.post.entity.embed.NickName;
+import roadtree.post.entity.embed.Password;
 
 @Entity
 @Getter
@@ -20,14 +23,15 @@ public class Comment {
     @Column
     private Long postId;
 
-    @Column
-    private String nickname;
+    @Embedded
+    private NickName nickname;
 
-    @Column
-    private String password;
+    @Embedded
+    private Password password;
 
-    @Column
-    private String content;
+    // 댓글 내용 작성전, 작성자의 닉네임과 비밀번호를 입력받는다.
+    @Embedded
+    private Content content;
 
     @Column
     private String createdAt;
@@ -37,4 +41,7 @@ public class Comment {
 
     @Column
     private String deletedBy;
+
+    @ManyToOne
+    private Post post;
 }

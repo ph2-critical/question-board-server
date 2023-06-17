@@ -19,5 +19,9 @@ public class NickName {
     }
 
     // 닉네임 검증 로직을 메서드로 넣어줄 수 있음.
-
+    // 닉네임은 빈칸으로 받지않는다.
+    public boolean checkNickName() {
+        if (this.nickname.isEmpty()) return false;
+        return true;
+    }
 }

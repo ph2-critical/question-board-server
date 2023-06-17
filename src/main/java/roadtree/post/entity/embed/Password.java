@@ -17,4 +17,11 @@ public class Password {
     public Password(String password) {
         this.password = password;
     }
+
+
+    // 패스워드를 빈칸으로 받지 않는다.
+    public boolean checkPassword() {
+        if (this.password.isEmpty()) return false;
+        return true;
+    }
 }
