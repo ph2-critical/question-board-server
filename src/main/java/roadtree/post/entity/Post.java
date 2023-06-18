@@ -56,7 +56,7 @@ public class Post {
     @Column
     private boolean notice;
 
-    @OneToOne
+    @Column
     private Category category;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
