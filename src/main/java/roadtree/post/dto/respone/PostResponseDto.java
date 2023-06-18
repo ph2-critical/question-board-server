@@ -3,6 +3,7 @@ package roadtree.post.dto.respone;
 import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import roadtree.post.entity.embed.Content;
 import roadtree.post.entity.embed.NickName;
@@ -16,6 +17,7 @@ public class PostResponseDto {
     @Getter
     @Setter
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class CreatedPost {
         private Long id;
         //        private String title; //재활용하면 되지않나?
@@ -30,18 +32,19 @@ public class PostResponseDto {
 
     }
     @Getter
-    @AllArgsConstructor
+    @Setter
+    @NoArgsConstructor
     public static class FindPost {
         private Long id;
-        private Title title;
-        private Content content;
-        private String categoryName;
-        private NickName nickName;
+        private String title;
+        private String content;
+        private int categoryId;
+        private String nickName;
         private String createdDate;
         private PostInfo postInfo;
         //         좋아요수, 조회수, 싫어요수, 나도궁수 초기화된 수들
         private int commentCount;
-        private List<String> commentList;
+        private List<Comment> commentList;
     }
 
     public static class DeletePost {
@@ -49,4 +52,16 @@ public class PostResponseDto {
         // 삭제 완료된 응답만해주면 될 듯
 
     }
+    @Setter
+    @Getter
+    @NoArgsConstructor
+    public static class Comment{
+        private Long id;
+        private String nickName;
+        private String content;
+        private String createdAt;
+
+    }
+
+
 }
