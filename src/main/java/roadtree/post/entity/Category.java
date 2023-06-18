@@ -6,20 +6,22 @@ import lombok.Getter;
 import lombok.Setter;
 import roadtree.post.entity.Post;
 
-@Entity
 @Getter
-@Setter
 @AllArgsConstructor
-public class Category {
+public enum Category {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    NOTICE(1, "공지사항"), FREE(2, "자유게시판"), QNA(3, "질문게시판"), Info(4, "정보게시판");
 
-    @Column
+    private int categoryId;
     private String categoryName;
 
-    @OneToOne(mappedBy = "category")
-    private Post post;
+    public static Category findCategory(int categoryId) {
+        for (Category category : Category.values()) {
+            if (category.getCategoryId() == categoryId) {
+                return category;
+            }
+        }
+        return null;
+    }
 
 }
