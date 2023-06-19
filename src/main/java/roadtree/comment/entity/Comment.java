@@ -1,10 +1,11 @@
-package roadtree.post.entity;
+package roadtree.comment.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import roadtree.post.entity.Post;
 import roadtree.post.entity.embed.Content;
 import roadtree.post.entity.embed.NickName;
 import roadtree.post.entity.embed.Password;
@@ -24,7 +25,7 @@ public class Comment {
     private Long postId;
 
     @Embedded
-    private NickName nickname;
+    private NickName nickName;
 
     @Embedded
     private Password password;
