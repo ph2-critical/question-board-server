@@ -1,14 +1,12 @@
 package roadtree.post.dto.respone;
 
-import jakarta.persistence.Embedded;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import roadtree.post.entity.embed.Content;
-import roadtree.post.entity.embed.NickName;
+import roadtree.comment.dto.respone.CommentResponseDto;
+import roadtree.comment.entity.Comment;
 import roadtree.post.entity.embed.PostInfo;
-import roadtree.post.entity.embed.Title;
 
 import java.util.List;
 
@@ -44,7 +42,7 @@ public class PostResponseDto {
         private PostInfo postInfo;
         //         좋아요수, 조회수, 싫어요수, 나도궁수 초기화된 수들
         private int commentCount;
-        private List<Comment> commentList;
+        private List<CommentResponseDto.Comment> commentList;
     }
 
     public static class DeletePost {
@@ -52,16 +50,17 @@ public class PostResponseDto {
         // 삭제 완료된 응답만해주면 될 듯
 
     }
-    @Setter
     @Getter
-    @NoArgsConstructor
-    public static class Comment{
+    @Setter
+    public static class SearchPost{
         private Long id;
-        private String nickName;
+        private String title;
         private String content;
-        private String createdAt;
-
+        private int categoryId;
+        private String nickName;
+        private String createdDate;
+        private PostInfo postInfo;
+        //         좋아요수, 조회수, 싫어요수, 나도궁수 초기화된 수들
+        private int commentCount;
     }
-
-
 }

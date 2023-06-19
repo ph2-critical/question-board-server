@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
+import roadtree.comment.entity.Comment;
 import roadtree.post.entity.embed.*;
 
 import java.util.ArrayList;

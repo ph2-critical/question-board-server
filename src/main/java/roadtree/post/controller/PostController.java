@@ -31,18 +31,29 @@ public class PostController {
     }
 
     //
-    @GetMapping
+    @GetMapping("/{id}")
     public HttpEntity<?> findPost(@PathVariable Long id) {
         Post findpost = postService.getPostById(id);
         PostResponseDto.FindPost findPost = mapper.findPostToDto(findpost);
-        return ResponseEntity.ok(findPost);
+        return new ResponseEntity<>(findPost, HttpStatus.OK) ;
     }
 
     // 검색 기능
     @GetMapping("/search")
-    public ResponseEntity<List<Post>> searchPosts(@RequestParam String keyword) {
+    public HttpEntity<?> searchPosts(@RequestParam String keyword) {
         List<Post> searchResult = postService.searchPosts(keyword);
-        return ResponseEntity.ok(searchResult);
+        List<PostResponseDto.SearchPost> searchPosts = mapper.postListToDtoList(searchResult);
+
+        return new ResponseEntity<>(searchPosts, HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public HttpEntity<?> deletePost(@PathVariable Long id, @RequestBody PostRequestDto.DeletePost deletePost) {
+        if(postService.deletePost(id,deletePost.getNickName(), deletePost.getPassword())){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+
 
 }

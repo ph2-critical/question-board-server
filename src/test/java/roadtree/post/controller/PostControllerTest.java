@@ -22,6 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import roadtree.comment.dto.request.CommentRequestDto;
+import roadtree.comment.dto.respone.CommentResponseDto;
 import roadtree.post.dto.request.PostRequestDto;
 import roadtree.post.dto.respone.PostResponseDto;
 import roadtree.post.entity.Category;
@@ -31,6 +33,7 @@ import roadtree.post.mapper.PostMapper;
 import roadtree.post.service.PostService;
 //import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
+import javax.xml.transform.Result;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,16 +48,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PostController.class)
-@ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
-@ContextConfiguration(classes = {PostController.class})
+@ExtendWith({RestDocumentationExtension.class})
+//@ContextConfiguration(classes = {PostController.class})
 @AutoConfigureRestDocs
 class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private WebApplicationContext ctx;
-
 
     @MockBean
     private PostService postService;
@@ -65,11 +64,6 @@ class PostControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Test
-    public void findPost() {
-        System.out.println("test");
-    }
 
     @Test
     public void createPost() throws Exception {
@@ -134,7 +128,7 @@ class PostControllerTest {
     }
 
     @Test
-    public void getPost() throws Exception {
+    public void findPost() throws Exception {
         //given
 
         // 들어오는 값
@@ -163,13 +157,13 @@ class PostControllerTest {
         findPost.setPostInfo(new PostInfo());
         findPost.setCommentCount(0);
         ;
-        ArrayList<PostResponseDto.Comment> comments = new ArrayList<>();
-        PostResponseDto.Comment comment1 = new PostResponseDto.Comment();
+        ArrayList<CommentResponseDto.Comment> comments = new ArrayList<>();
+        CommentResponseDto.Comment comment1 = new CommentResponseDto.Comment();
         comment1.setId(1L);
         comment1.setNickName("닉네임2");
         comment1.setContent("댓글 내용");
         comment1.setCreatedAt("2021-08-01");
-        PostResponseDto.Comment comment2 = new PostResponseDto.Comment();
+        CommentResponseDto.Comment comment2 = new CommentResponseDto.Comment();
         comment2.setId(2L);
         comment2.setNickName("닉네임1");
         comment2.setContent("댓글 내용");
@@ -226,19 +220,83 @@ class PostControllerTest {
 
     }
 
+    //게시글 검색
+    @Test
+    public void searchPost() throws Exception {
+        //given
+        //들어가는 값
+        String keyword = "검색어";
+
+        // 나와야하는 값
+        List<PostResponseDto.SearchPost> list = new ArrayList<>();
+        PostResponseDto.SearchPost searchPost = new PostResponseDto.SearchPost();
+        searchPost.setId(1L);
+        searchPost.setTitle("제목");
+        searchPost.setContent("내용");
+        searchPost.setNickName("닉네임");
+        searchPost.setCategoryId(2);
+        searchPost.setCreatedDate("2021-08-01");
+        searchPost.setPostInfo(new PostInfo(100L, 1L, 0L, 3L));
+        searchPost.setCommentCount(1);
+        list.add(searchPost);
+
+        given(postService.searchPosts(Mockito.anyString()))
+                .willReturn(new ArrayList<>());
+        given(mapper.postListToDtoList(Mockito.anyList())).willReturn(list);
+
+        //when
+        ResultActions actions
+                = mockMvc.perform(get("/api/v1/posts/search")
+                .param("keyword", keyword)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+        );
+        //then
+        actions.andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").exists())
+                .andDo(document("post/searchPosts",
+                                queryParameters(
+                                        parameterWithName("keyword").description("검색어")
+                                ),
+                                responseFields(
+                                        fieldWithPath("[].id").type(JsonFieldType.NUMBER).description("게시글 번호"),
+                                        fieldWithPath("[].title").type(JsonFieldType.STRING).description("제목"),
+                                        fieldWithPath("[].content").type(JsonFieldType.STRING).description("내용"),
+                                        fieldWithPath("[].categoryId").type(JsonFieldType.NUMBER).description("카테고리 번호"),
+                                        fieldWithPath("[].nickName").type(JsonFieldType.STRING).description("작성자 닉네임"),
+                                        fieldWithPath("[].createdDate").type(JsonFieldType.STRING).description("게시글 생성 날짜"),
+                                        fieldWithPath("[].postInfo").type(JsonFieldType.OBJECT).description("게시글 정보"),
+                                        fieldWithPath("[].postInfo.views").type(JsonFieldType.NUMBER).description("조회수"),
+                                        fieldWithPath("[].postInfo.likes").type(JsonFieldType.NUMBER).description("좋아요 수"),
+                                        fieldWithPath("[].postInfo.dislikes").type(JsonFieldType.NUMBER).description("싫어요 수"),
+                                        fieldWithPath("[].postInfo.meToo").type(JsonFieldType.NUMBER).description("나도궁 수"),
+                                        fieldWithPath("[].commentCount").type(JsonFieldType.NUMBER).description("댓글 개수")
+                                )
+                        )
+                );
+
+    }
+
+
     // 게시글 삭제
     @Test
     public void deletePost() throws Exception {
         //given
         // 들어오는 값
         Long requestPostId = 1L;
-
         // 결과값
+        PostRequestDto.DeletePost deletePost = new PostRequestDto.DeletePost();
+        deletePost.setNickName("닉네임");
+        deletePost.setPassword("비밀번호");
 
+
+        given(postService.deletePost(Mockito.any(Long.class), Mockito.anyString(), Mockito.anyString()))
+                .willReturn(true);
         //when
         // 게시글 생성 요청을 보내고, 응답 확인
         ResultActions actions
                 = mockMvc.perform(delete("/api/v1/posts/{id}", requestPostId)
+                .content(objectMapper.writeValueAsString(deletePost))
                 .accept(MediaType.APPLICATION_JSON)
 
                 .contentType(MediaType.APPLICATION_JSON)
@@ -255,4 +313,7 @@ class PostControllerTest {
                         )
                 );
     }
+
+
+
 }

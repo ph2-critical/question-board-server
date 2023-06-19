@@ -23,11 +23,14 @@ public class PostRequestDto {
             return categoryId == 1;
         }
     }
+    @Setter
     public static class FindPost {
         public Long id; // 게시판 번호
     }
+    @Getter
+    @Setter
     public static class DeletePost {
-        public Long id; // 게시판 번호
+        //public Long id; // /게시판 번호
         public String nickName; // 작성자 닉네임
         public String password; // 작성자 비밀번호
 
