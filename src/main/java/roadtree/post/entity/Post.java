@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.persistence.*;
+import roadtree.audit.Auditable;
 import roadtree.comment.entity.Comment;
 import roadtree.post.entity.embed.*;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class Post extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,11 +38,6 @@ public class Post {
 
     @Embedded
     private PostInfo postInfo;
-
-
-    @Column
-    //게시판작성,
-    private String createdAt;
 
     //최근 댓글 업데이트날짜
     @Column
