@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import roadtree.post.entity.embed.PostInfo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class CommentResponseDto {
@@ -23,7 +24,7 @@ public class CommentResponseDto {
         private Long id;
         private String nickName;
         private String content;
-        private String createdAt;
+        private LocalDateTime createdAt;
 
     }
     @Getter

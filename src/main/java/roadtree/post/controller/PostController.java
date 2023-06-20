@@ -1,6 +1,8 @@
 package roadtree.post.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class PostController {
     private final PostMapper mapper;
     //전체 조회, 최신순 조회,
 
-    @PostMapping()
+    @PostMapping
     public HttpEntity<?> createBoard(@RequestBody PostRequestDto.CreatePost createPost){
 
         Post post = mapper.createPostDtoToPost(createPost);
@@ -46,6 +48,15 @@ public class PostController {
 
         return new ResponseEntity<>(searchPosts, HttpStatus.OK);
     }
+    @GetMapping
+    public ResponseEntity<Page<PostResponseDto.SearchPost>> getPosts(@RequestParam(defaultValue = "0") int page,
+                                                               @RequestParam(defaultValue = "10") int size){
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<Post> searchPosts = postService.getPosts(pageable);
+        return new ResponseEntity(searchPosts, HttpStatus.OK);
+    }
+
+
 
     @DeleteMapping("/{id}")
     public HttpEntity<?> deletePost(@PathVariable Long id, @RequestBody PostRequestDto.DeletePost deletePost) {

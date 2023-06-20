@@ -1,6 +1,8 @@
 package roadtree.post.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import roadtree.post.dto.respone.PostResponseDto;
 import roadtree.post.repository.PostRepository;
@@ -16,7 +18,7 @@ public class PostService {
     final private PostRepository postRepository;
 
     public PostResponseDto.CreatedPost createPost(Post post) {
-        postRepository.save(post);
+        post = postRepository.save(post);
 
         return new PostResponseDto.CreatedPost(post.getPostId(), post.getCreatedAt());
     }
@@ -46,7 +48,7 @@ public class PostService {
     }
 
 
-
-
-
+    public Page<Post> getPosts(PageRequest pageable) {
+        return postRepository.findAll(pageable);
+    }
 }

@@ -8,6 +8,7 @@ import roadtree.comment.dto.respone.CommentResponseDto;
 import roadtree.comment.entity.Comment;
 import roadtree.post.entity.embed.PostInfo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class PostResponseDto {
@@ -22,7 +23,7 @@ public class PostResponseDto {
 //        private String content; //재활용하면 되지않나?
 //        private String category; //재활용하면 되지않나?
 //        private String writer; //재활용하면 되지않나?
-        private String createdDate;
+        private LocalDateTime createdDate;
 //        private PostInfo postInfo;
         // 좋아요수, 조회수, 싫어요수, 나도궁수 초기화된 수들
 //        private int commentCount; // 댓글 0
@@ -38,7 +39,7 @@ public class PostResponseDto {
         private String content;
         private int categoryId;
         private String nickName;
-        private String createdDate;
+        private LocalDateTime createdDate;
         private PostInfo postInfo;
         //         좋아요수, 조회수, 싫어요수, 나도궁수 초기화된 수들
         private int commentCount;
@@ -58,7 +59,7 @@ public class PostResponseDto {
         private String content;
         private int categoryId;
         private String nickName;
-        private String createdDate;
+        private LocalDateTime createdDate;
         private PostInfo postInfo;
         //         좋아요수, 조회수, 싫어요수, 나도궁수 초기화된 수들
         private int commentCount;
