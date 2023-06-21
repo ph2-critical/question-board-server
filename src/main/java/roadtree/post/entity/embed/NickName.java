@@ -24,4 +24,13 @@ public class NickName {
         if (this.nickname.isEmpty()) return false;
         return true;
     }
+    public void setNickname(String nickname) {
+        if (nickname == null || nickname.trim().isEmpty()) {
+            throw new IllegalArgumentException("닉네임 칸은 비어있을 수 없습니다.");
+        }
+        if (nickname.length() < 3 /*|| nickname.length() > 20*/) {
+            throw new IllegalArgumentException("닉네임 길이는 최소 3자리는 넘어야합니다.");
+        }
+        this.nickname = nickname;
+    }
 }
